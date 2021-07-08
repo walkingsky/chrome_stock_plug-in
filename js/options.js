@@ -204,15 +204,25 @@ function saveStockJiaoyi() {
 	var kind = $('input[name="jiaoyi"]:checked').val();
 	var price = $('#price').val()*1;
 	var value = $('#value').val()*1;
+
+	var row = $('tr:contains("'+stockCode+'")');
+	var oldValue = $("#stockBuyNum", row).text()*1;	
+	//return;
 	if (price*1 >0 && value*1 >0)
 	{
 		if ( kind === 'sell')
 		{
 			SettingsDB.sell(stockCode,price,value);
+			value = oldValue-value;
 		}else{
 			SettingsDB.buy(stockCode,price,value);
+			value = oldValue + value;
 		}
-		showMessage("保存备注成功");
+		//console.log(value);
+		$("#stockBuyNum", row).text(value);
+		$(".stockBuyNum", row).html(value);
+		showMessage("保存交易成功");
+		saveOptions();
 
 	}else showMessage("输入错误");
 
@@ -353,6 +363,7 @@ function init() {
 	$("#btnImportStockHuoban").click(function() { importStockHuoban(); });
 	//$("#btnBuyStock").click(function() { BuyStock(); });
 	//$("#btnSellStock").click(function() { SellStock(); });
+	$("#btnCleanjiaoyi").click(function(){SettingsDB.clean();showMessage("交易记录已被清空");});
 
 	
 	$("#stocksTable").delegate(".note", "click", function(){ showStockNote(); });
