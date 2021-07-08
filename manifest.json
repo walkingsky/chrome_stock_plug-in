@@ -1,0 +1,24 @@
+{
+    "background": {
+       "page": "background.html"
+    },
+    "browser_action": {
+       "default_title": "",
+       "default_icon": "images/icon_19.png",
+       "default_popup": "popup.html"
+    },
+    "description": "\u80a1\u7968\u52a9\u624b\u3002\u6211\u7684\u6d4b\u8bd5",
+    "icons": {
+       "128": "images/icon.png",
+       "16": "images/icon_16.png",
+       "32": "images/icon_32.png",
+       "48": "images/icon_48.png"
+    },
+    "manifest_version": 2,
+    "name": "股票分析助手",
+    "optional_permissions": [ "background", "*://*/*" ],
+    "options_page": "options_1.html",
+    "permissions": [ "cookies", "tts", "idle", "notifications", "tabs", "http://*/", "https://*/" ],
+    "update_url": "http://www.baidu.com",
+    "version": "1.0.0"
+ }
