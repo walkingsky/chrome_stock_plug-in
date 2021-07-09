@@ -56,3 +56,5 @@ SettingsDB.getStock =  function getStock(stock_code,callBack){
 	});
 	//return result;
 };
+
+SettingsDB.init();

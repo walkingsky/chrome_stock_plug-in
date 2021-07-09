@@ -14,6 +14,7 @@ function show_chart(){
 		{type:'max',name:'最高'},
 		{type:'min',name:'最低'}];
 	var stockCode = $(".stockCode", row).text();
+	//console.log(stockCode);
 	if (stockCode != "") {
 		var jiaoyiLog ;		
 		var stockBuyNum = $(".stockBuyNum",row).text()*1;
@@ -21,7 +22,6 @@ function show_chart(){
 		SettingsDB.getStock(stockCode,function(result){
 			var y_data_chigu=[];
 			var buy_val=0,sell_val=0;
-			console.log(result);
 			jiaoyiLog = result;
 			console.log(jiaoyiLog);
 			if(jiaoyiLog.length >0)
