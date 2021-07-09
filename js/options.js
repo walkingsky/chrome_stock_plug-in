@@ -53,15 +53,18 @@ function show_chart(){
 				success:function(response,status,xhr){
 					//console.log('状态为：' + status + ',状态是：' + xhr.statusText);
 					//console.log(response);
-					var x_Axis=[],y_data=[];
+					var x_Axis=[],y_data=[],i=0;
 					for ( var data in response.data){               
 						temp_string = response.data[data][0];
 						//console.log(typeof(temp_string));
 						x_Axis.push(temp_string.substr(0, 2)+':'+temp_string.substr(2));                
 						y_data.push(response.data[data][1]);
-						
+						i ++;						
 					}
-					
+					while(i<242){
+						x_Axis.push("");
+						i++;
+					}
 					var option = {
 						title: {
 							text: response.name
