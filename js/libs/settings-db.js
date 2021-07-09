@@ -16,7 +16,8 @@ SettingsDB.clean = function clean(){
 };
 SettingsDB.buy = function buy(stock_code,price,value){
 	var mDate = new Date();
-	var time = (mDate.getHours().toString().length == 1 ? '0'+mDate.getHours() : mDate.getHours())+':'+mDate.getMinutes();
+	var time = (mDate.getHours().toString().length == 1 ? '0'+mDate.getHours() : mDate.getHours());
+	time = time + ':'+ (mDate.getMinutes().toString().length == 1 ? '0'+mDate.getMinutes() : mDate.getMinutes());
 	DB.transaction(function(tx){
 		tx.executeSql('INSERT INTO jiaoyi (code,time,value,price) VALUES( ? ,?,?,? )',[stock_code,time,value*1,price*1]);
 	});
