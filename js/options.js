@@ -53,28 +53,54 @@ function show_chart(){
 				success:function(response,status,xhr){
 					//console.log('状态为：' + status + ',状态是：' + xhr.statusText);
 					//console.log(response);
-					var x_Axis=[],y_data=[],i=0;
+					var x_Axis=[],y_data=[],i=0,y_data_bili=[];
 					for ( var data in response.data){               
 						temp_string = response.data[data][0];
 						//console.log(typeof(temp_string));
 						x_Axis.push(temp_string.substr(0, 2)+':'+temp_string.substr(2));                
 						y_data.push(response.data[data][1]);
+						y_data_bili.push(((response.data[data][1]-response.yestclose)/response.yestclose*100).toFixed(2));
 						i ++;						
 					}
 					while(i<242){
 						x_Axis.push("");
 						i++;
 					}
+					var colors = ['#5470C6', '#91CC75', '#EE6666'];
 					var option = {
 						title: {
 							text: response.name
 						},
+						tooltip: {
+							trigger: 'axis',
+							axisPointer: {
+								type: 'cross'
+							}
+						},
+						grid: [
+							{
+								left: '5%',
+								right: '20%',
+								//bottom: 20
+							},
+							{
+								left: '85%',
+								right: '5%',
+								//height: 80,
+								//bottom: 10
+							}
+						],
 						xAxis: [
 							{
 								data: x_Axis
 							},
 							{
+								scale:true,
+								//type:'value',
+								gridIndex:1,
+								//data:y_data_chigu
 								data:['持有','买入','卖出']
+								
 							}
 						],
 						legend:{
@@ -95,12 +121,44 @@ function show_chart(){
 							{
 								type:'value',
 								scale:true,
-								name:"股价"
+								name:"股价",
+								axisLine: {
+									show: true,
+									lineStyle: {
+										color: colors[0]
+									}
+								},
+								axisLabel: {
+									formatter: '{value} 元'
+								}
 							},
 							{
 								type:'value',
-								min: 0,
-								name:"持股"
+								scale:true,
+								name:"浮动比",
+								axisLine: {
+									show: true,
+									lineStyle: {
+										color: colors[0]
+									}
+								},
+								axisLabel: {
+									formatter: '{value}%'
+								}
+							},
+							{
+								//type:'category',
+								type:'value',								
+								name:"持股",
+								//offset: 60,
+								gridIndex:1,
+								axisLine: {
+									show: true,
+									lineStyle: {
+										color: colors[0]
+									}
+								},
+								
 							}
 						],
 						series: [
@@ -121,11 +179,19 @@ function show_chart(){
 								}
 							},
 							{
-								name: '持股',								
+								name: '浮动比',								
 								type: 'bar',
 								yAxisIndex:1,
+								xAxisIndex:0,
+								data: y_data_bili								
+							},
+							{
+								name: '持股',								
+								type: 'bar',
+								yAxisIndex:2,
 								xAxisIndex:1,
-								data: y_data_chigu								
+								//data: ['持有','买入','卖出']	
+								data:y_data_chigu							
 							}
 						]
 					};
