@@ -104,7 +104,7 @@ function show_chart(){
 							}
 						],
 						legend:{
-							data:['股价','持股数量']
+							data:['股价','浮动比','持股数量']
 						},
 						toolbox: {
 							show: true,
@@ -149,7 +149,7 @@ function show_chart(){
 							{
 								//type:'category',
 								type:'value',								
-								name:"持股",
+								name:"持股数量",
 								//offset: 60,
 								gridIndex:1,
 								axisLine: {
@@ -163,7 +163,7 @@ function show_chart(){
 						],
 						series: [
 							{
-								name: '价格',
+								name: '股价',
 								smooth: 0.2,
 								type: 'line',
 								data: y_data,
@@ -186,7 +186,7 @@ function show_chart(){
 								data: y_data_bili								
 							},
 							{
-								name: '持股',								
+								name: '持股数量',								
 								type: 'bar',
 								yAxisIndex:2,
 								xAxisIndex:1,
