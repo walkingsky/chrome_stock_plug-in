@@ -441,8 +441,8 @@ function init() {
 	$("#stocksTable").delegate(".chart", "click", function(){ show_chart(); });
 	$("#stocksTable").delegate("#jiaoyi", "click", function(){ BuyStock(); });
 	
-	initializeStockRow();
-	
+	initializeStockRow();	
+
 	window.setTimeout(updateStockPriceLoop, 5000);
 }
 function initializeTabs() {
@@ -489,6 +489,8 @@ function initializeStockRow() {
 		},
         dragHandle: "dragHandle"
     });
+	
+	
 }
 function setAutoComplete(input, row) {
 	// http://suggest3.sinajs.cn/suggest/type=&key=flzc&name=gpdm
@@ -640,6 +642,46 @@ function updateStockPriceLoop(){
 	{
 		updateStockPrice();
 	}
+
+	//放在循环里不知道有什么问题没有，但是放在其他地方不起作用。
+	$("#stocksTable").tablesorter({
+		theme : 'blue',
+		textExtraction: {
+		4: function(node, table, cellIndex) {
+			//console.log($(node).find("span").value());
+				return $(node).find("span:last").text();
+		}
+		},
+		headers:{
+			0:{sorter:false},
+			1:{sorter:false},
+			16:{sorter:false},
+			4:{ sorter : "digit" },
+			5:{ sorter : "digit" },
+			6:{ sorter : "digit" },
+			7:{ sorter : "digit" },
+			8:{ sorter : "digit" },
+			9:{ sorter : "digit" },
+			10:{ sorter : "digit" },
+			11:{ sorter : "digit" },
+			12:{ sorter : "digit" },
+			13:{ sorter : "digit" },
+			14:{ sorter : "digit" },
+			15:{ sorter : "digit" },
+		}
+	  });
+	  //先清除事件，再绑定
+	  $("#stocksTable").undelegate();
+	  $("#stocksTable").undelegate();
+	  $("#stocksTable").undelegate();
+	  $("#stocksTable").undelegate();
+	  $("#stocksTable").undelegate();
+
+	  $("#stocksTable").delegate(".note", "click", function(){ showStockNote(); });
+	  $("#stocksTable").delegate(".delete", "click", function(){ deleteStockRow(); });
+	  $("#stocksTable").delegate(".flag", "click", function(){ flagStock(); });
+	  $("#stocksTable").delegate(".chart", "click", function(){ show_chart(); });
+	  $("#stocksTable").delegate("#jiaoyi", "click", function(){ BuyStock(); });
 	window.setTimeout(updateStockPriceLoop, 5000);
 }
 
@@ -651,7 +693,7 @@ function updateStockPrice() {
 		for (var i = 0; i < rows.length; i++) {
 			updateStockInfo($(rows[i]));
 		}
-
+		//$("#myTable").tablesorter({ sortList: [[0,0], [1,0]] });
 		$("#btnLoadStock").attr("disabled", ""); 
 	}, 0);
 }

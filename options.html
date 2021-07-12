@@ -3,6 +3,7 @@
 	<title>股票分析助手</title>
     <link href="styles/options.css" rel="stylesheet" type="text/css" />
 	<link href="styles/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+	<link href="styles/theme.blue.min.css" rel="stylesheet" type="text/css" />
     <!-- 引入 echarts.js -->
     <!-- 
 	<script src="echarts.min.js"></script>
@@ -18,6 +19,7 @@
 	<script type="text/javascript" src="js/libs/settings-db.js"></script>
     <script type="text/javascript" src="js/libs/huoban.js"></script>
     <script type="text/javascript" src="js/libs/jquery.tablednd_0_5.js"></script>
+	<script type="text/javascript" src="js/libs/jquery.tablesorter.js"></script>
 	<script type="text/javascript" src="js/stockInfo.js"></script>
 	<script type="text/javascript" src="js/stock.js"></script>
     <script type="text/javascript" src="js/options.js"></script>
@@ -40,51 +42,54 @@
     <div id="options" style="height:100%">
         <div id="custom-stock-infos" style="height:100%">		    
 			<div id="main" style="width: 100%;height:400px;"></div>
-            <table id="stocksTable" class="stocksTable">
-    			<tr>
-                    
-					<th width="14px"></th>
-                    <th width="26px">标记</th>
-    				<th width="75px">股票名称</th>
-    				<th width="75px">股票代码</th>
-    				<th width="66px">涨跌幅</th>
-    				<th width="63px">当前价</th>
-    				<th width="50px">涨跌价</th>
-    				<th width="63px">今开价</th>
-    				<th width="63px">昨收价</th>
-    				<th width="63px">最高价</th>
-    				<th width="63px">最低价</th>
-    				<th width="63px">上破价</th>
-    				<th width="63px">下破价</th>                    
-                    <th width="63px">买入价</th>
-                    <th width="63px">买入量</th>
-                    <th width="63px">收 益</th>
-    				<th width="150px">操作</th>
-    			</tr>
-    			<tr class="templateRow">
-                    <td class="dragHandle" title="拖动"> </td>
-                   	<td><div class="flag" title="标记股票"></div></td>
-    				<td><div style="cursor: pointer; position: relative;" title="点击修改"><span class="stockName"></span><input id="stockName" type="text"></div></td>
-    				<td><div><span class="stockCode" style="cursor: pointer;" title="点击进入新浪财经行"></span></div></td>
-    				<td><div><span class="stockChangeRate"></span></div></td>
-    				<td><div><span class="stockPrice"></span></div></td>
-    				<td><div><span class="stockChangeAmt"></span></div></td>
-    				<td><div><span class="stockOpenPrice"></span></div></td>
-    				<td><div><span class="stockClosePrice"></span></div></td>
-    				<td><div><span class="stockMaxPrice"></span></div></td>
-    				<td><div><span class="stockMinPrice"></span></div></td>
-    				<td><div style="cursor: pointer;" title="点击修改"><span class="stockUpPrice">0.00</span><input id="stockUpPrice" type="text" value="0.00"></div></td>
-    				<td><div style="cursor: pointer;" title="点击修改"><span class="stockDownPrice">0.00</span><input id="stockDownPrice" type="text" value="0.00"></div></td>
-                    <td><div style="cursor: pointer;" title="点击修改"><span class="stockBuyPrice">0.000</span><input id="stockBuyPrice" type="text" value="0.000"></div></td>
-                    <td><div style="cursor: pointer;" title="点击修改"><span class="stockBuyNum">0</span><input id="stockBuyNum" type="text" value="0"></div></td>
-                    <td><div><span class="stockProfit"></span></div></td>
-    				<td>
-    					<div class="note" title="备注"><br/></div>
-    					<div class="delete" title="删除股票"><br/></div>
-						<div class="chart" title="图表"><br/></div>
-						<div  title="交易">&nbsp;<button id="jiaoyi">交易</button></div>
-    				</td>
-    			</tr>
+            <table id="stocksTable" class="stocksTable tablesorter tablesorter-blue">
+    			<thead>
+					<tr>                    
+						<th width="14px"></th>
+						<th width="26px">标记</th>
+						<th width="75px">股票名称</th>
+						<th width="75px">股票代码</th>
+						<th width="66px">涨跌幅</th>
+						<th width="63px">当前价</th>
+						<th width="50px">涨跌价</th>
+						<th width="63px">今开价</th>
+						<th width="63px">昨收价</th>
+						<th width="63px">最高价</th>
+						<th width="63px">最低价</th>
+						<th width="63px">上破价</th>
+						<th width="63px">下破价</th>                    
+						<th width="63px">买入价</th>
+						<th width="63px">买入量</th>
+						<th width="63px">收 益</th>
+						<th width="150px">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="templateRow">
+						<td class="dragHandle" title="拖动"> </td>
+						<td><div class="flag" title="标记股票"></div></td>
+						<td><div style="cursor: pointer; position: relative;" title="点击修改"><span class="stockName"></span><input id="stockName" type="text"></div></td>
+						<td><div><span class="stockCode" style="cursor: pointer;" title="点击进入新浪财经行"></span></div></td>
+						<td><div><span class="stockChangeRate"></span></div></td>
+						<td><div><span class="stockPrice"></span></div></td>
+						<td><div><span class="stockChangeAmt"></span></div></td>
+						<td><div><span class="stockOpenPrice"></span></div></td>
+						<td><div><span class="stockClosePrice"></span></div></td>
+						<td><div><span class="stockMaxPrice"></span></div></td>
+						<td><div><span class="stockMinPrice"></span></div></td>
+						<td><div style="cursor: pointer;" title="点击修改"><span class="stockUpPrice">0.00</span><input id="stockUpPrice" type="text" value="0.00"></div></td>
+						<td><div style="cursor: pointer;" title="点击修改"><span class="stockDownPrice">0.00</span><input id="stockDownPrice" type="text" value="0.00"></div></td>
+						<td><div style="cursor: pointer;" title="点击修改"><span class="stockBuyPrice">0.000</span><input id="stockBuyPrice" type="text" value="0.000"></div></td>
+						<td><div style="cursor: pointer;" title="点击修改"><span class="stockBuyNum">0</span><input id="stockBuyNum" type="text" value="0"></div></td>
+						<td><div><span class="stockProfit"></span></div></td>
+						<td>
+							<div class="note" title="备注"><br/></div>
+							<div class="delete" title="删除股票"><br/></div>
+							<div class="chart" title="图表"><br/></div>
+							<div  title="交易">&nbsp;<button id="jiaoyi">交易</button></div>
+						</td>
+					</tr>
+				</tbody>
     		</table>
     		<div id="custom-stock-control" class="custom-stock-control">
     			<button id="btnNewStock">新股票</button>
