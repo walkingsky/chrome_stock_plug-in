@@ -487,7 +487,7 @@ function initializeStockRow() {
         onDragStart: function(table, row) {
 			stopUpdateInfo = true;
 		},
-        dragHandle: "dragHandle"
+        //dragHandle: "dragHandle"
     });
 	
 	
@@ -655,7 +655,8 @@ function updateStockPriceLoop(){
 		headers:{
 			0:{sorter:false},
 			1:{sorter:false},
-			16:{sorter:false},
+			15:{sorter:false},
+			3:{ sorter : "digit" },
 			4:{ sorter : "digit" },
 			5:{ sorter : "digit" },
 			6:{ sorter : "digit" },
@@ -666,8 +667,7 @@ function updateStockPriceLoop(){
 			11:{ sorter : "digit" },
 			12:{ sorter : "digit" },
 			13:{ sorter : "digit" },
-			14:{ sorter : "digit" },
-			15:{ sorter : "digit" },
+			14:{ sorter : "digit" }
 		}
 	  });
 	  //先清除事件，再绑定
@@ -743,7 +743,7 @@ function newStockRow(stock, activate) {
 		updateStockInfo(row);
 	}
 	else {
-		$(".dragHandle", row).removeClass("dragHandle").attr("title", "");
+		//$(".dragHandle", row).removeClass("dragHandle").attr("title", "");
 	}
 
 	if (activate) {
