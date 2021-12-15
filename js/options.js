@@ -6,6 +6,10 @@ var backgroundPage = null;
 var stopUpdateInfo = false;
 
 
+function his_chart(){
+	
+}
+
 
 //function get_date(stock_code){
 function show_chart(){
@@ -439,6 +443,7 @@ function init() {
 	$("#stocksTable").delegate(".delete", "click", function(){ deleteStockRow(); });
 	$("#stocksTable").delegate(".flag", "click", function(){ flagStock(); });
 	$("#stocksTable").delegate(".chart", "click", function(){ show_chart(); });
+	$("#stocksTable").delegate("#history", "click", function(){ his_chart(); });
 	$("#stocksTable").delegate("#jiaoyi", "click", function(){ BuyStock(); });
 	
 	initializeStockRow();	
@@ -681,6 +686,7 @@ function updateStockPriceLoop(){
 	  $("#stocksTable").delegate(".delete", "click", function(){ deleteStockRow(); });
 	  $("#stocksTable").delegate(".flag", "click", function(){ flagStock(); });
 	  $("#stocksTable").delegate(".chart", "click", function(){ show_chart(); });
+	  $("#stocksTable").delegate("#history", "click", function(){ his_chart(); });
 	  $("#stocksTable").delegate("#jiaoyi", "click", function(){ BuyStock(); });
 	window.setTimeout(updateStockPriceLoop, 5000);
 }
