@@ -167,6 +167,7 @@ function updateStocks() {
 								//汤旭宁 add
 								stockInfo.stockProfit = parseFloat((stockInfo.stockCurrPrice - stockInfo.stockBuyPrice)*stockInfo.stockBuyNum).toFixed(3);
 							}
+							console.log(stockInfo);
 						} catch(e) { 
 							console.error(e); 
 							console.log(elements);

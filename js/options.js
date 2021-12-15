@@ -5,9 +5,386 @@ $(document).ready(function() {
 var backgroundPage = null; 
 var stopUpdateInfo = false;
 
+function get_today(){
+	// 获取当前日期
+	var date = new Date();
+
+	// 获取当前月份
+	var nowMonth = date.getMonth() + 1;
+
+	// 获取当前是几号
+	var strDate = date.getDate();
+
+	// 添加分隔符“-”
+	var seperator = "";
+
+	// 对月份进行处理，1-9月在前面添加一个“0”
+	if (nowMonth >= 1 && nowMonth <= 9) {
+	nowMonth = "0" + nowMonth;
+	}
+
+	// 对月份进行处理，1-9号在前面添加一个“0”
+	if (strDate >= 0 && strDate <= 9) {
+	strDate = "0" + strDate;
+	}
+
+	// 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期
+	var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
+	return nowDate;
+}
+
+// 历史图用的数据处理函数 1
+function calculateMA(dayCount, data) {
+	var result = [];
+	for (var i = 0, len = data.values.length; i < len; i++) {
+		if (i < dayCount) {
+			result.push('-');
+			continue;
+		}
+		var sum = 0;
+		for (var j = 0; j < dayCount; j++) {
+			sum += data.values[i - j][1];
+		}
+		result.push(+(sum / dayCount).toFixed(3));
+	}
+	return result;
+}
 
 function his_chart(){
-	
+	var row = event.target.parentNode.parentNode;
+	var stockCode = $(".stockCode", row).text();
+	if (stockCode != "") {
+		//console.log(stockCode);
+		//https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&fqt=0&end=29991010&klt=101&secid=0.003038&fqt=1&lmt=1000
+		
+		var today = get_today();
+		var stock_code = (stockCode.substring(0,2) == "sz" ? "0":"1") + "." +stockCode.substring(2);
+		url = "https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&fqt=0&end="+today+"&klt=101&secid="+ stock_code+"&fqt=1&lmt=1000";
+		//console.log(url);
+		$.ajax({
+			url:url,
+			dataTypey:"json",
+			type:"get",
+			//async:false,
+			//contentType: 'application/json;charset=utf-8',
+			success:function(response,status,xhr){
+				 
+
+				$.ajax({
+					url:'http://127.0.0.1:8080/?code='+stockCode,
+					dataType:'json',
+					type:'get',
+					success:function(rawData) {
+					//console.log(rawData);
+					const upColor = '#ec0000';
+					const upBorderColor = '#8A0000';
+					const downColor = '#00da3c';
+					const downBorderColor = '#008F28';
+						
+						//console.log(response);
+						let categoryData = [];
+						let values = [];
+						let volumes = [];
+						let buy = [];
+						let sell = [];
+						let pointmark = [];
+
+						for (var item in response.data.klines){
+							//console.log(response.data.klines[item]);
+							var datas = response.data.klines[item].split(',');
+							//console.log(datas);
+							categoryData.push(datas[0]);
+							var jiaoyi = false;
+							var buy_num = 0;
+							var sell_num = 0;
+							for (var i in rawData){
+								if (rawData[i].date == datas[0]){
+									
+									if(rawData[i].sell_buy == '买入'){
+										buy_num += rawData[i].num;
+									}else{
+										sell_num += rawData[i].num;
+									}
+									//console.log(rawData[i].sell_buy);
+								}
+								pointmark.push({
+									name: 'Mark',
+									coord: [rawData[i].date, rawData[i].price],
+									value: rawData[i].num,
+									itemStyle: {
+									  color: rawData[i].sell_buy == '买入'?'rgb(41,60,85)':'rgb(220,10,10)'
+									}
+								  });
+							}
+							buy.push([parseInt(item),buy_num,1]);
+							sell.push([parseInt(item),sell_num,-1]);
+							
+							values.push([parseFloat(datas[1]),parseFloat(datas[2]),parseFloat(datas[3]),parseFloat(datas[4])]);
+							volumes.push(datas[0]);
+
+						}
+
+						var data = {
+							categoryData,
+							values,
+							volumes,
+							buy:buy,
+							sell:sell
+						}
+						console.log(data);
+
+						var option = {
+							animation: false,
+							legend: {
+							bottom: 10,
+							left: 'center',
+							data: ['K值数据', 'MA5', 'MA10', 'MA20', 'MA30']
+							},
+							tooltip: {
+							trigger: 'axis',
+							axisPointer: {
+								type: 'cross'
+							},
+							borderWidth: 1,
+							borderColor: '#ccc',
+							padding: 10,
+							textStyle: {
+								color: '#000'
+							},
+							position: function (pos, params, el, elRect, size) {
+								const obj = {
+								top: 10
+								};
+								obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+								return obj;
+							}
+							// extraCssText: 'width: 170px'
+							},
+							axisPointer: {
+							link: [
+								{
+								xAxisIndex: 'all'
+								}
+							],
+							label: {
+								backgroundColor: '#777'
+							}
+							},
+							toolbox: {
+							feature: {
+								dataZoom: {
+								yAxisIndex: false
+								},
+								brush: {
+								type: ['lineX', 'clear']
+								}
+							}
+							},
+							brush: {
+							xAxisIndex: 'all',
+							brushLink: 'all',
+							outOfBrush: {
+								colorAlpha: 0.1
+							}
+							},
+							visualMap: {
+							show: false,
+							seriesIndex: 5,
+							dimension: 2,
+							pieces: [
+								{
+								value: 1,
+								color: downColor
+								},
+								{
+								value: -1,
+								color: upColor
+								}
+							]
+							},
+							grid: [
+							{
+								left: '10%',
+								right: '8%',
+								height: '50%'
+							},
+							{
+								left: '10%',
+								right: '8%',
+								top: '63%',
+								height: '16%'
+							}
+							],
+							xAxis: [
+							{
+								type: 'category',
+								data: data.categoryData,
+								scale: true,
+								boundaryGap: false,
+								axisLine: { onZero: false },
+								splitLine: { show: false },
+								min: 'dataMin',
+								max: 'dataMax',
+								axisPointer: {
+								z: 100
+								}
+							},
+							{
+								type: 'category',
+								gridIndex: 1,
+								data: data.categoryData,
+								scale: true,
+								boundaryGap: false,
+								axisLine: { onZero: false },
+								axisTick: { show: false },
+								splitLine: { show: false },
+								axisLabel: { show: false },
+								min: 'dataMin',
+								max: 'dataMax'
+							}
+							],
+							yAxis: [
+							{
+								scale: true,
+								splitArea: {
+								show: true
+								}
+							},
+							{
+								scale: true,
+								gridIndex: 1,
+								splitNumber: 2,
+								axisLabel: { show: false },
+								axisLine: { show: false },
+								axisTick: { show: false },
+								splitLine: { show: false }
+							}
+							],
+							dataZoom: [
+							{
+								type: 'inside',
+								xAxisIndex: [0, 1],
+								start: 90,
+								end: 100
+							},
+							{
+								show: true,
+								xAxisIndex: [0, 1],
+								type: 'slider',
+								top: '85%',
+								start: 90,
+								end: 100
+							}
+							],
+							series: [
+							{
+								name: 'K值数据',
+								type: 'candlestick',
+								data: data.values,
+								itemStyle: {
+									color: upColor,
+									color0: downColor,
+									borderColor: upBorderColor,
+									borderColor0: downBorderColor
+								},
+								tooltip: {
+									formatter: function (param) {
+										param = param[0];
+										return [
+										'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
+										'开盘: ' + param.data[0] + '<br/>',
+										'收盘: ' + param.data[1] + '<br/>',
+										'最低: ' + param.data[2] + '<br/>',
+										'最高: ' + param.data[3] + '<br/>'
+										].join('');
+									}
+								},
+								markPoint: {
+       
+									//data: pointmark
+								}
+								
+							},
+							{
+								name: 'MA5',
+								type: 'line',
+								data: calculateMA(5, data),
+								smooth: false,
+								lineStyle: {
+								opacity: 0.5
+								}
+							},
+							{
+								name: 'MA10',
+								type: 'line',
+								data: calculateMA(10, data),
+								smooth: true,
+								lineStyle: {
+								opacity: 0.5
+								}
+							},
+							{
+								name: 'MA20',
+								type: 'line',
+								data: calculateMA(20, data),
+								smooth: true,
+								lineStyle: {
+								opacity: 0.5
+								}
+							},
+							{
+								name: 'MA30',
+								type: 'line',
+								data: calculateMA(30, data),
+								smooth: true,
+								lineStyle: {
+								opacity: 0.5
+								}
+							},
+							/*
+							{
+								name: '买入',
+								type: 'bar',
+								data: data.buy,
+								smooth: true,
+								lineStyle: {
+								opacity: 0.5
+								}
+							},
+							
+							{
+								name: 'Volume',
+								type: 'bar',
+								xAxisIndex: 1,
+								yAxisIndex: 1,
+								data: data.volumes
+							},
+							*/
+							{
+								name: '买入',
+								type: 'bar',
+								xAxisIndex: 1,
+								yAxisIndex: 1,
+								data: data.buy
+							},
+							
+							{
+								name: '卖出',
+								type: 'bar',
+								xAxisIndex: 1,
+								yAxisIndex: 1,
+								data: data.sell
+							}
+							]
+						};
+
+						var myChart = echarts.init(document.getElementById('main'));
+						myChart.setOption(option);
+					}
+				});
+			}
+		});	
+	}
 }
 
 
@@ -661,7 +1038,7 @@ function updateStockPriceLoop(){
 			0:{sorter:false},
 			1:{sorter:false},
 			15:{sorter:false},
-			3:{ sorter : "digit" },
+			3:{ sorter : "percent" },
 			4:{ sorter : "digit" },
 			5:{ sorter : "digit" },
 			6:{ sorter : "digit" },

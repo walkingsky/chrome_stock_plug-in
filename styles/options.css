@@ -154,6 +154,7 @@ table.stocksTable {
     width:90%;
     background:#fff;
     padding: 8px;
+	height: 600px;
 }
 .custom-stock-control {
     width: 90%;
