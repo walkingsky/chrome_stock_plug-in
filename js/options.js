@@ -87,6 +87,7 @@ function his_chart(){
 						let volumes = [];
 						let buy = [];
 						let sell = [];
+						let position = [];
 						let pointmark = [];
 
 						for (var item in response.data.klines){
@@ -97,27 +98,37 @@ function his_chart(){
 							var jiaoyi = false;
 							var buy_num = 0;
 							var sell_num = 0;
-							for (var i in rawData){
-								if (rawData[i].date == datas[0]){
+							var position_num = 0;
+							for (var i in rawData.history){
+								if (rawData.history[i].date == datas[0]){
 									
-									if(rawData[i].sell_buy == '买入'){
-										buy_num += rawData[i].num;
+									if(rawData.history[i].sell_buy == '买入'){
+										buy_num += rawData.history[i].num;
 									}else{
-										sell_num += rawData[i].num;
+										sell_num += rawData.history[i].num;
 									}
 									//console.log(rawData[i].sell_buy);
 								}
 								pointmark.push({
 									name: 'Mark',
-									coord: [rawData[i].date, rawData[i].price],
-									value: rawData[i].num,
+									coord: [rawData.history[i].date, rawData.history[i].price],
+									value: rawData.history[i].num,
 									itemStyle: {
-									  color: rawData[i].sell_buy == '买入'?'rgb(41,60,85)':'rgb(220,10,10)'
+									  color: rawData.history[i].sell_buy == '买入'?'rgb(41,60,85)':'rgb(220,10,10)'
 									}
 								  });
 							}
+
+							for (i in rawData.position){								
+								if (rawData.position[i].date == datas[0]){
+									position_num = rawData.position[i].num;
+								}
+							} 
+
+
 							buy.push([parseInt(item),buy_num,1]);
 							sell.push([parseInt(item),sell_num,-1]);
+							position.push([parseInt(item),position_num]);
 							
 							values.push([parseFloat(datas[1]),parseFloat(datas[2]),parseFloat(datas[3]),parseFloat(datas[4])]);
 							volumes.push(datas[0]);
@@ -129,7 +140,8 @@ function his_chart(){
 							values,
 							volumes,
 							buy:buy,
-							sell:sell
+							sell:sell,
+							position:position
 						}
 						console.log(data);
 
@@ -264,7 +276,7 @@ function his_chart(){
 							{
 								type: 'inside',
 								xAxisIndex: [0, 1],
-								start: 90,
+								start: 95,
 								end: 100
 							},
 							{
@@ -272,7 +284,7 @@ function his_chart(){
 								xAxisIndex: [0, 1],
 								type: 'slider',
 								top: '85%',
-								start: 90,
+								start: 95,
 								end: 100
 							}
 							],
@@ -374,6 +386,13 @@ function his_chart(){
 								xAxisIndex: 1,
 								yAxisIndex: 1,
 								data: data.sell
+							},
+							{
+								name: '持仓',
+								type: 'line',
+								xAxisIndex: 1,
+								yAxisIndex: 1,
+								data: data.position
 							}
 							]
 						};
@@ -823,8 +842,34 @@ function init() {
 	$("#stocksTable").delegate("#history", "click", function(){ his_chart(); });
 	$("#stocksTable").delegate("#jiaoyi", "click", function(){ BuyStock(); });
 	
-	initializeStockRow();	
-
+	initializeStockRow();
+	//放在循环里不知道有什么问题没有，但是放在其他地方不起作用。
+	$("#stocksTable").tablesorter({
+		theme : 'blue',
+		textExtraction: {
+		4: function(node, table, cellIndex) {
+			//console.log($(node).find("span").value());
+				return $(node).find("span:last").text();
+		}
+		},
+		headers:{
+			0:{sorter:false},
+			1:{sorter:false},
+			15:{sorter:false},
+			3:{ sorter : "percent" },
+			4:{ sorter : "digit" },
+			5:{ sorter : "digit" },
+			6:{ sorter : "digit" },
+			7:{ sorter : "digit" },
+			8:{ sorter : "digit" },
+			9:{ sorter : "digit" },
+			10:{ sorter : "digit" },
+			11:{ sorter : "digit" },
+			12:{ sorter : "digit" },
+			13:{ sorter : "digit" },
+			14:{ sorter : "digit" }
+		}
+	});
 	window.setTimeout(updateStockPriceLoop, 5000);
 }
 function initializeTabs() {
@@ -1014,6 +1059,8 @@ function updateStockInfo(row) {
 					$(".stockChangeRate", row).html("+" + stockInfo.stockChangeRate + "%");
 				}
 			}
+			//$("#stocksTable").trigger("updateCache");
+			//$("#stocksTable").trigger("update");
 		}
 	});
 }
@@ -1022,49 +1069,29 @@ function updateStockPriceLoop(){
 	
 	if (isOperation())
 	{
-		updateStockPrice();
+		updateStockPrice();	
 	}
+	$("#stocksTable").trigger("updateCache");
+	$("#stocksTable").trigger("update");
+	//$("#stocksTable").trigger("updateAll");
+	var sorting = [[$("#stocksTable").data('sorting'), 0]];
+	$("#stocksTable").trigger("sorton", [sorting]);
+	$("#stocksTable").trigger("sorton",[sorting]);
+	
+	
+	//先清除事件，再绑定
+	$("#stocksTable").undelegate();
+	$("#stocksTable").undelegate();
+	$("#stocksTable").undelegate();
+	$("#stocksTable").undelegate();
+	$("#stocksTable").undelegate();
 
-	//放在循环里不知道有什么问题没有，但是放在其他地方不起作用。
-	$("#stocksTable").tablesorter({
-		theme : 'blue',
-		textExtraction: {
-		4: function(node, table, cellIndex) {
-			//console.log($(node).find("span").value());
-				return $(node).find("span:last").text();
-		}
-		},
-		headers:{
-			0:{sorter:false},
-			1:{sorter:false},
-			15:{sorter:false},
-			3:{ sorter : "percent" },
-			4:{ sorter : "digit" },
-			5:{ sorter : "digit" },
-			6:{ sorter : "digit" },
-			7:{ sorter : "digit" },
-			8:{ sorter : "digit" },
-			9:{ sorter : "digit" },
-			10:{ sorter : "digit" },
-			11:{ sorter : "digit" },
-			12:{ sorter : "digit" },
-			13:{ sorter : "digit" },
-			14:{ sorter : "digit" }
-		}
-	  });
-	  //先清除事件，再绑定
-	  $("#stocksTable").undelegate();
-	  $("#stocksTable").undelegate();
-	  $("#stocksTable").undelegate();
-	  $("#stocksTable").undelegate();
-	  $("#stocksTable").undelegate();
-
-	  $("#stocksTable").delegate(".note", "click", function(){ showStockNote(); });
-	  $("#stocksTable").delegate(".delete", "click", function(){ deleteStockRow(); });
-	  $("#stocksTable").delegate(".flag", "click", function(){ flagStock(); });
-	  $("#stocksTable").delegate(".chart", "click", function(){ show_chart(); });
-	  $("#stocksTable").delegate("#history", "click", function(){ his_chart(); });
-	  $("#stocksTable").delegate("#jiaoyi", "click", function(){ BuyStock(); });
+	$("#stocksTable").delegate(".note", "click", function(){ showStockNote(); });
+	$("#stocksTable").delegate(".delete", "click", function(){ deleteStockRow(); });
+	$("#stocksTable").delegate(".flag", "click", function(){ flagStock(); });
+	$("#stocksTable").delegate(".chart", "click", function(){ show_chart(); });
+	$("#stocksTable").delegate("#history", "click", function(){ his_chart(); });
+	$("#stocksTable").delegate("#jiaoyi", "click", function(){ BuyStock(); });
 	window.setTimeout(updateStockPriceLoop, 5000);
 }
 
@@ -1077,6 +1104,7 @@ function updateStockPrice() {
 			updateStockInfo($(rows[i]));
 		}
 		//$("#myTable").tablesorter({ sortList: [[0,0], [1,0]] });
+		
 		$("#btnLoadStock").attr("disabled", ""); 
 	}, 0);
 }
