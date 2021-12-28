@@ -89,7 +89,7 @@ function his_chart(){
 						let sell = [];
 						let position = [];
 						let pointmark = [];
-
+						var position_his = 0;
 						for (var item in response.data.klines){
 							//console.log(response.data.klines[item]);
 							var datas = response.data.klines[item].split(',');
@@ -99,13 +99,16 @@ function his_chart(){
 							var buy_num = 0;
 							var sell_num = 0;
 							var position_num = 0;
+							
 							for (var i in rawData.history){
 								if (rawData.history[i].date == datas[0]){
 									
 									if(rawData.history[i].sell_buy == '买入'){
 										buy_num += rawData.history[i].num;
+										//position_his += buy_num;
 									}else{
 										sell_num += rawData.history[i].num;
+										//position_his -= sell_num;
 									}
 									//console.log(rawData[i].sell_buy);
 								}
@@ -118,12 +121,20 @@ function his_chart(){
 									}
 								  });
 							}
-
+							position_his = position_his + buy_num -sell_num;
+							if (position_his <0 )
+								position_his =0;
+							var have_trading = false;
 							for (i in rawData.position){								
 								if (rawData.position[i].date == datas[0]){
 									position_num = rawData.position[i].num;
+									have_trading = true;
+									position_his = position_num;
 								}
 							} 
+							if ( have_trading === false){
+								position_num = position_his;
+							}
 
 
 							buy.push([parseInt(item),buy_num,1]);
