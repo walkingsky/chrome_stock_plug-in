@@ -407,7 +407,7 @@ function his_chart(){
 							}
 							]
 						};
-
+						echarts.dispose(document.getElementById('main'));
 						var myChart = echarts.init(document.getElementById('main'));
 						myChart.setOption(option);
 					}
@@ -606,6 +606,7 @@ function show_chart(){
 							}
 						]
 					};
+					echarts.dispose(document.getElementById('main'));
 					var myChart = echarts.init(document.getElementById('main'));
 					myChart.setOption(option);
 					
