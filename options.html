@@ -23,6 +23,7 @@
 	<script type="text/javascript" src="js/stockInfo.js"></script>
 	<script type="text/javascript" src="js/stock.js"></script>
     <script type="text/javascript" src="js/options.js"></script>
+	<script type="text/javascript" src="js/options_industry.js"></script>
 </head>
 <body>
     <div id="message" class="message">保存成功</div>
@@ -30,6 +31,7 @@
 		<h3>股票提醒助手</h3>
 		<ul class="menu">
 			<li><a href="#custom-stock-infos">自选股</a></li>
+			<li><a href="#industry-infos">行业分析</a></li>
             <li><a href="#basic-options">提醒设置</a></li>
             <li><a href="#money-options">资金设置</a></li>
 			<li><a href="#backup">数据备份</a></li>
@@ -40,6 +42,14 @@
 		</div>
 	</div>
     <div id="options" style="height:100%">
+		<div id="industry-infos" style="height:100%">
+			
+			<div id="in_main" style="width:100%;height:600px;"></div>
+			<div id="in_main1" style="width:100%;height:600px;"></div>
+			<div  class="custom-stock-control">
+    			<button id="sort">正序</button>							
+    		</div>			
+		</div>
         <div id="custom-stock-infos" style="height:100%">		    
 			<div id="main" style="width: 100%;height:400px;"></div>
             <table id="stocksTable" class="stocksTable tablesorter tablesorter-blue">

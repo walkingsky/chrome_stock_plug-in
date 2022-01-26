@@ -33,15 +33,15 @@ function openStockPage(stockCode) {
 }
 
 function openSinaStock() {
-	chrome.tabs.create({url: "http://finance.sina.com.cn/stock/index.shtml"});
+	chrome.tabs.create({url: "https://finance.sina.com.cn/stock/index.shtml"});
 }
 
 function getImageSrc(stockCode) {
-	return "http://image.sinajs.cn/newchart/min/n/" + stockCode + ".gif?" + Math.random();
+	return "https://image.sinajs.cn/newchart/min/n/" + stockCode + ".gif?" + Math.random();
 }
 
 function getImageSrc2(stockCode) {
-	return "http://image.sinajs.cn/newchart/daily/n/" + stockCode + ".gif?" + Math.random();
+	return "https://image.sinajs.cn/newchart/daily/n/" + stockCode + ".gif?" + Math.random();
 }
 
 function loadStocks() {
@@ -53,7 +53,7 @@ function loadStocks() {
 		return;
 	}
 	
-	stockGetUrl = "http://hq.sinajs.cn/list=";
+	stockGetUrl = "https://hq.sinajs.cn/list=";
 	
 	var index = 0;
 	for (var i in stocks) {
@@ -94,7 +94,7 @@ function loadStocks() {
 
 function setStocks(strStocks) {
 	
-	stockGetUrl = "http://hq.sinajs.cn/list=" + strStocks;
+	stockGetUrl = "https://hq.sinajs.cn/list=" + strStocks;
 	stockGetInfos = [];
 	
 	var stockCodes = strStocks[i].split(",");
@@ -191,7 +191,7 @@ function getStockInfo(stockCode, f){
 	try {
 		var xhr = new window.XMLHttpRequest();
 					
-		xhr.open("GET", "http://hq.sinajs.cn/list=" + stockCode, true);
+		xhr.open("GET", "https://hq.sinajs.cn/list=" + stockCode, true);
 		xhr.onreadystatechange = function() {
 			var stockInfo = undefined;
 			var stockName = undefined;
