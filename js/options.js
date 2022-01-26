@@ -154,7 +154,7 @@ function his_chart(){
 							sell:sell,
 							position:position
 						}
-						console.log(data);
+						//console.log(data);
 
 						var option = {
 							animation: false,
@@ -164,24 +164,24 @@ function his_chart(){
 							data: ['K值数据', 'MA5', 'MA10', 'MA20', 'MA30']
 							},
 							tooltip: {
-							trigger: 'axis',
-							axisPointer: {
-								type: 'cross'
-							},
-							borderWidth: 1,
-							borderColor: '#ccc',
-							padding: 10,
-							textStyle: {
-								color: '#000'
-							},
-							position: function (pos, params, el, elRect, size) {
-								const obj = {
-								top: 10
-								};
-								obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
-								return obj;
-							}
-							// extraCssText: 'width: 170px'
+								trigger: 'axis',
+								axisPointer: {
+									type: 'cross'
+								},
+								borderWidth: 1,
+								borderColor: '#ccc',
+								padding: 10,
+								textStyle: {
+									color: '#000'
+								},
+								position: function (pos, params, el, elRect, size) {
+									const obj = {
+									top: 10
+									};
+									obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+									return obj;
+								}
+								// extraCssText: 'width: 170px'
 							},
 							axisPointer: {
 							link: [
@@ -311,17 +311,23 @@ function his_chart(){
 									borderColor0: downBorderColor
 								},
 								tooltip: {
+									show:true,
 									formatter: function (param) {
+										console.log(param);
 										param = param[0];
-										return [
+										var param_ = 
+										 [
 										'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
 										'开盘: ' + param.data[0] + '<br/>',
 										'收盘: ' + param.data[1] + '<br/>',
 										'最低: ' + param.data[2] + '<br/>',
 										'最高: ' + param.data[3] + '<br/>'
 										].join('');
+										console.info(param_);
+										return param_;
 									}
 								},
+								//dimensions: [ '日期','开盘', '收盘', '最高', '最低'],
 								markPoint: {
        
 									//data: pointmark
@@ -407,6 +413,7 @@ function his_chart(){
 							}
 							]
 						};
+						//console.log(option);
 						echarts.dispose(document.getElementById('main'));
 						var myChart = echarts.init(document.getElementById('main'));
 						myChart.setOption(option);
@@ -434,7 +441,7 @@ function show_chart(){
 			var y_data_chigu=[];
 			var buy_val=0,sell_val=0;
 			jiaoyiLog = result;
-			console.log(jiaoyiLog);
+			//console.log(jiaoyiLog);
 			if(jiaoyiLog.length >0)
 			{
 				for(var jiaoyi in jiaoyiLog){
@@ -454,7 +461,7 @@ function show_chart(){
 			y_data_chigu.push(sell_val);
 			stockCode = stockCode.replace('sh','0');
 			stockCode = stockCode.replace('sz','1');
-			console.log(markPointData);
+			//console.log(markPointData);
 	
 			$.ajax({
 				url:"http://img1.money.126.net/data/hs/time/today/"+stockCode+".json",
@@ -888,6 +895,7 @@ function initializeTabs() {
 	$("ul.menu li:first").addClass("tabActive").show(); 
 	$("#options > div").hide();
 	$("#custom-stock-infos").show();
+	
 	
 	$("ul.menu li").click(function() {
 
