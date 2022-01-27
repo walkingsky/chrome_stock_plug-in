@@ -196,9 +196,9 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
             
             //正序的时候也有负值
             //if(sort != 'asc') allData = sortData(allData);
-            console.log(allData);
+            //console.log(allData);
             allData = sortData(allData,sort);
-            console.log(allData);
+            //console.log(allData);
             function getLevelOption() {
                return [
                  {

@@ -138,6 +138,7 @@ function updateStocks() {
 		var xhr = new window.XMLHttpRequest();
 					
 		xhr.open("GET", stockGetUrl, false);
+		//xhr.setRequestHeader("referer","https://quotes.sina.cn");
 		xhr.onreadystatechange = function() {
 			var stockInfo = undefined;
 			if (xhr.readyState == 4) {
@@ -191,22 +192,27 @@ function getStockInfo(stockCode, f){
 	try {
 		var xhr = new window.XMLHttpRequest();
 					
-		xhr.open("GET", "https://hq.sinajs.cn/list=" + stockCode, true);
+		
+		//xhr.open("GET", "https://hq.sinajs.cn/list=" + stockCode, true);
+		//https://qt.gtimg.cn/q=
+		xhr.open("GET", "https://qt.gtimg.cn/q=" + stockCode, true)
+		//xhr.setRequestHeader("referer","https://quotes.sina.cn");
 		xhr.onreadystatechange = function() {
 			var stockInfo = undefined;
 			var stockName = undefined;
 		
 			if (xhr.readyState == 4) {
-				var elements = xhr.responseText.split(/_|="|,|"/);
+				var elements = xhr.responseText.split(/~/);
+				//console.log(elements);
 
 				if(elements.length > 5) {
 					try {
 						stockInfo = {
-							stockOpenPrice: parseFloat(elements[4]).toFixed(3),
-							stockClosePrice: parseFloat(elements[5]).toFixed(3),
-							stockCurrPrice: parseFloat(elements[6]).toFixed(3),
-							stockMaxPrice: parseFloat(elements[7]).toFixed(3),
-							stockMinPrice: parseFloat(elements[8]).toFixed(3),
+							stockOpenPrice: parseFloat(elements[5]).toFixed(3),
+							stockClosePrice: parseFloat(elements[4]).toFixed(3),
+							stockCurrPrice: parseFloat(elements[3]).toFixed(3),
+							stockMaxPrice: parseFloat(elements[33]).toFixed(3),
+							stockMinPrice: parseFloat(elements[34]).toFixed(3),
 							stockVolume: (parseInt(elements[11]) / 100).toFixed(),
 							stockTurnover: (parseInt(elements[12]) / 10000).toFixed(),
 							stockLastDate: elements[33],
@@ -222,7 +228,7 @@ function getStockInfo(stockCode, f){
 							stockInfo.stockProfit = parseFloat((stockInfo.stockCurrPrice - stockInfo.stockBuyPrice)*stockInfo.stockBuyNum).toFixed(3);
 						}
 						
-						stockName = elements[3];
+						stockName = elements[1];
 					} catch(e) { 
 						console.error(e); 
 						console.log(elements);
