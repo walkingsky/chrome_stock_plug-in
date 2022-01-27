@@ -78,16 +78,18 @@ function getInfo(info, index, kind, sort) {
                   json.data.diff[item].name = json.data.diff[item].f14;
                   if (kind != 'increase') {
                      //fid = 'f62'; //按主力流入净值排序
-                     json.data.diff[item].value = json.data.diff[item].f62;
-                     json.data.diff[item].value_show = json.data.diff[item].f62;
+                     //json.data.diff[item].value = json.data.diff[item].f62;
+                     //json.data.diff[item].value_show = json.data.diff[item].f62;
+                     json.data.diff[item].value = [json.data.diff[item].f62,json.data.diff[item].f62];
                   }else{
-                     json.data.diff[item].value = json.data.diff[item].f3;
-                     json.data.diff[item].value_show = json.data.diff[item].f3;
+                     //json.data.diff[item].value = json.data.diff[item].f3;
+                     //json.data.diff[item].value_show = json.data.diff[item].f3;
+                     json.data.diff[item].value = [json.data.diff[item].f3,json.data.diff[item].f3];
                   }
                }  
                //value_show  显示用的真实值   
                //value 图表用的数据，后期会被修改成全部正值          
-               json = JSON.parse('{"index":'+index+',"name":"'+industryName+'","value_show":'+industryValue+',"value":'+industryValue+',"industryCode":"'+industryCode+'","children":'+JSON.stringify(json.data.diff)+'}');
+               json = JSON.parse('{"index":'+index+',"name":"'+industryName+'","value":['+industryValue+','+industryValue+'],"industryCode":"'+industryCode+'","children":'+JSON.stringify(json.data.diff)+'}');
                resolve(json);
             }
             delete xhr;
@@ -99,16 +101,58 @@ function getInfo(info, index, kind, sort) {
    });
 }
 
-function sortData(data){
-   //pz=20 可调返回数据量
-   console.log(data[19].value);
-   for(var i in data){
-      data[i].value = data[data.length - 1].value - data[i].value;
-      for (var j in data[i].children) {         
-         //pz=10 可调返回数据量
-         data[i].children[j].value = data[i].children[data[i].children.length-1].value - data[i].children[j].value;         
+function sortData(data,sort){
+   if(sort == 'asc'){
+      //pz=20 可调返回数据量
+      //console.log(data[19].value);
+      for(var i in data){
+         data[i].value[0] = data[i].value[0] - data[data.length - 1].value[0]  ;
+         //data[i].max = Math.abs(data[i].value[0])>Math.abs( data[data.length - 1].value[0])?Math.abs(data[i].value[0]):Math.abs( data[data.length - 1].value[0]);
+         if (data[i].value[1] >0){
+            data[i].value[2] = 1; 
+         }else if(data[i].value[1] <0){
+            data[i].value[2] = -1;
+         }else{
+            data[i].value[2] = 0;
+         }
+         for (var j in data[i].children) {         
+            //pz=10 可调返回数据量
+            data[i].children[j].value[0] =  data[i].children[j].value[0] - data[i].children[data[i].children.length - 1].value[0]  ; 
+            if (data[i].children[j].value[1] >0){
+               data[i].children[j].value[2] = 1; 
+            }else if(data[i].children[j].value[1] <0){
+               data[i].children[j].value[2] = -1;
+            }else{
+               data[i].children[j].value[2] = 0;
+            }                  
+         }
+      }
+   }else{
+      //pz=20 可调返回数据量
+      //console.log(data[19].value);
+      for(var i in data){
+         data[i].value[0] = data[data.length - 1].value[0] - data[i].value[0];
+         if (data[i].value[1] >0){
+            data[i].value[2] = 1; 
+         }else if(data[i].value[1] <0){
+            data[i].value[2] = -1;
+         }else{
+            data[i].value[2] = 0;
+         }
+         for (var j in data[i].children) {         
+            //pz=10 可调返回数据量
+            data[i].children[j].value[0] = data[i].children[data[i].children.length-1].value[0] - data[i].children[j].value[0];
+            if (data[i].children[j].value[1] >0){
+               data[i].children[j].value[2] = 1; 
+            }else if(data[i].children[j].value[1] <0){
+               data[i].children[j].value[2] = -1;
+            }else{
+               data[i].children[j].value[2] = 0;
+            }
+         }
       }
    }
+   
    return data;
 }
 
@@ -138,12 +182,15 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
 
          Promise.all(promises).then((allData) => {
             
-            if(sort != 'asc'&& kind) allData = sortData(allData);
+            //正序的时候也有负值
+            //if(sort != 'asc') allData = sortData(allData);
+            console.log(allData);
+            allData = sortData(allData,sort);
             console.log(allData);
             function getLevelOption() {
                return [
                  {
-                   itemStyle: {
+                  itemStyle: {
                      borderColor: '#777',
                      borderWidth: 0,
                      gapWidth: 1
@@ -153,8 +200,10 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
                    }
                  },
                  {
-                   itemStyle: {
-                     borderColor: '#555',
+                  color: ['#269f3c','#aaa','#942e38' ],
+                  colorMappingBy: 'value',
+                  itemStyle: {
+                     borderColor: '#999',
                      borderWidth: 5,
                      gapWidth: 1
                    },
@@ -165,13 +214,14 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
                    }
                  },
                  {
-                   colorSaturation: [0.35, 0.5],
-                   itemStyle: {
-                     borderWidth: 5,
+                  color: ['#269f3c','#aaa','#942e38' ],
+                  colorMappingBy: 'value',
+                  itemStyle: {
+                     
                      gapWidth: 1,
-                     borderColorSaturation: 0.6
-                   }
+                     borderWidth: 5,                   }
                  }
+
                ];
              }
             charts.setOption(
@@ -182,7 +232,7 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
                  },
                  tooltip: {
                    formatter: function (info) {
-                     var value = info.data.value_show;
+                     var value = info.data.value[1];
                      var treePathInfo = info.treePathInfo;
                      var treePath = [];
                      for (var i = 1; i < treePathInfo.length; i++) {
@@ -200,7 +250,10 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
                    {
                      name: kind == 'increase'?'行业分析(涨跌幅)':'行业分析(主力流入净额)',
                      type: 'treemap',
-                     visibleMin: 300,
+                     //visibleMin: 300,
+                     visualMin: -1,
+                     visualMax: 1,
+                     visualDimension: 2,
                      label: {
                        show: true,
                        formatter: '{b}'

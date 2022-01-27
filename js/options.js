@@ -1087,7 +1087,7 @@ function updateStockInfo(row) {
 
 function updateStockPriceLoop(){
 	
-	if (isOperation())
+	if (isOperation()  && $("#custom-stock-infos").is(":visible"))
 	{
 		updateStockPrice();	
 	}
