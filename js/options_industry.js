@@ -110,10 +110,16 @@ function sortData(data,sort){
          //data[i].max = Math.abs(data[i].value[0])>Math.abs( data[data.length - 1].value[0])?Math.abs(data[i].value[0]):Math.abs( data[data.length - 1].value[0]);
          if (data[i].value[1] >0){
             data[i].value[2] = 1; 
+            //data[i].color = ['#942e38'];
+            data[i].itemStyle = {"borderColor": '#CC3333'};
          }else if(data[i].value[1] <0){
             data[i].value[2] = -1;
+            //data[i].color = ['#269f3c'];
+            data[i].itemStyle = {"borderColor":  '#339933'};
          }else{
             data[i].value[2] = 0;
+            //data[i].color = ['#aaa'];
+            data[i].itemStyle = {"borderColor": '#bbb'};
          }
          for (var j in data[i].children) {         
             //pz=10 可调返回数据量
@@ -134,10 +140,16 @@ function sortData(data,sort){
          data[i].value[0] = data[data.length - 1].value[0] - data[i].value[0];
          if (data[i].value[1] >0){
             data[i].value[2] = 1; 
+            //data[i].color = ['#942e38'];
+            data[i].itemStyle = {"borderColor": '#CC3333'};
          }else if(data[i].value[1] <0){
             data[i].value[2] = -1;
+            //data[i].color = ['#269f3c'];
+            data[i].itemStyle = {"borderColor":  '#339933'};
          }else{
             data[i].value[2] = 0;
+            //data[i].color = ['#aaa'];
+            data[i].itemStyle = {"borderColor": '#bbb'};
          }
          for (var j in data[i].children) {         
             //pz=10 可调返回数据量
@@ -152,8 +164,8 @@ function sortData(data,sort){
          }
       }
    }
-   
    return data;
+   //return  JSON.parse('[{"name":"test","value":1,"children":'+JSON.stringify( data)+'}]');
 }
 
 function getIndustry(charts,kind = 'increase', sort = 'asc') {
@@ -190,10 +202,11 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
             function getLevelOption() {
                return [
                  {
+                  
                   itemStyle: {
                      borderColor: '#777',
                      borderWidth: 0,
-                     gapWidth: 1
+                     gapWidth: 0
                    },
                    upperLabel: {
                      show: false
@@ -214,12 +227,17 @@ function getIndustry(charts,kind = 'increase', sort = 'asc') {
                    }
                  },
                  {
-                  color: ['#269f3c','#aaa','#942e38' ],
-                  colorMappingBy: 'value',
+                  
                   itemStyle: {
-                     
-                     gapWidth: 1,
-                     borderWidth: 5,                   }
+                     borderColor: '#999',
+                     borderWidth: 1,
+                     gapWidth: 1
+                   },
+                   emphasis: {
+                     itemStyle: {
+                       borderColor: '#ddd'
+                     }
+                   }
                  }
 
                ];
