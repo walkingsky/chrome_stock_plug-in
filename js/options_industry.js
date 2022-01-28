@@ -1,47 +1,65 @@
-$(document).ready(function () {
-   mainContainer1 = document.getElementById('in_main');
-   mainContainer2 = document.getElementById('in_main1');
+var mainContainer1 = document.getElementById('in_main');
+var mainContainer2 = document.getElementById('in_main1');
 
-   var resizeMainContainer = function () {
-      mainContainer1.style.width = window.innerWidth + 'px';
-      mainContainer1.style.height = window.innerHeight * 1.2 + 'px';
-      mainContainer2.style.width = window.innerWidth + 'px';
-      mainContainer2.style.height = window.innerHeight * 1.2 + 'px';
-   };
-   //设置div容器高宽
+var resizeMainContainer = function () {
+   mainContainer1.style.width = window.innerWidth * 0.9 + 'px';
+   mainContainer1.style.height = window.innerHeight * 1.2 + 'px';
+   mainContainer2.style.width = window.innerWidth * 0.9 + 'px';
+   mainContainer2.style.height = window.innerHeight * 1.2 + 'px';
+};
+//设置div容器高宽
+resizeMainContainer();
+// 初始化图表
+//var myChart = echarts.init(dom);
+
+var industryChart1 = echarts.init(mainContainer1);
+var industryChart2 = echarts.init(mainContainer2);
+
+$(window).on('resize', function () {
    resizeMainContainer();
-   // 初始化图表
-   //var myChart = echarts.init(dom);
-   var industryChart1 = echarts.init(mainContainer1);
-   var industryChart2 = echarts.init(mainContainer2);
+   industryChart1.resize();
+   industryChart2.resize();
+});
 
-   $(window).on('resize', function () {
-      resizeMainContainer();
-      industryChart1.resize();
-      industryChart2.resize();
-   });
-
+$(document).ready(function () {
+   
 	//myChart.setOption(option);
    getIndustry(industryChart1);
    getIndustry(industryChart2,'in');
-   var sort = 1 ;
    $("#sort").click(function() { 
       if ($("#sort").html() == '正序'){
          $("#sort").html('倒序');
-         sort = 1;
          getIndustry(industryChart1,'increase','desc');
          getIndustry(industryChart2,'in','desc');
       }else{
          $("#sort").html('正序');
-         sort = 0;
          getIndustry(industryChart1,'increase');
          getIndustry(industryChart2,'in');
       }
        
    });
+   window.setTimeout(updateLoop, 10000);
 });
 
-
+function updateLoop(){
+	
+	if (isOperation()  && $("#industry-infos").is(":visible"))
+	{
+		//var mainContainer1 = document.getElementById('in_main');
+      //var mainContainer2 = document.getElementById('in_main1');
+      //var industryChart1 = echarts.init(mainContainer1);
+      //var industryChart2 = echarts.init(mainContainer2);
+      
+      if ($("#sort").html() != '正序'){
+         getIndustry(industryChart1,'increase','desc');
+         getIndustry(industryChart2,'in','desc');
+      }else{
+         getIndustry(industryChart1,'increase');
+         getIndustry(industryChart2,'in');
+      }	
+	}
+   window.setTimeout(updateLoop, 10000);
+}
 
 function getInfo(info, index, kind, sort) {
    return new Promise((resolve, reject) => {
