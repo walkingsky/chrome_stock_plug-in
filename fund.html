@@ -1,0 +1,75 @@
+﻿<html>
+<head>
+	<title>基金持仓情况</title>
+    <link href="styles/options.css" rel="stylesheet" type="text/css" />
+	<link href="styles/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+	<link href="styles/theme.blue.min.css" rel="stylesheet" type="text/css" />
+    <!-- 引入 echarts.js -->
+    <!-- 
+	<script src="echarts.min.js"></script>
+	-->
+	<script src="js/libs/echarts.js"></script>
+	<script src="js/libs/jquery-3.6.0.min.js"></script>
+	<link href="styles/options.css" rel="stylesheet" type="text/css" />
+	<link href="styles/jquery.autocomplete.css" rel="stylesheet" type="text/css" /> 
+	<script type="text/javascript" src="js/libs/jquery-1.7.min.js"></script>
+	<script type="text/javascript" src="js/libs/jquery.autocomplete.min.js"></script>
+	<script type="text/javascript" src="js/libs/autoresize.js"></script>
+	<script type="text/javascript" src="js/libs/settings.js"></script>
+	<script type="text/javascript" src="js/libs/settings-db.js"></script>
+    <script type="text/javascript" src="js/libs/huoban.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.tablednd_0_5.js"></script>
+	<script type="text/javascript" src="js/libs/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="js/stock.js"></script>
+	<script type="text/javascript" src="js/fund.js"></script>
+</head>
+<body>
+    
+    <div id="tabMenu">
+		<h3>基金持仓情况</h3>
+		<ul class="menu">
+			<li><a href="#custom-fund-infos">持仓基金</a></li>
+		</ul>
+		<div class='separator'></div>
+		<div id="footer">
+			版本 2.0.0<br/>
+		</div>
+	</div>
+    <div id="options" style="height:100%">
+        <div id="custom-fund-infos" style="height:100%">			
+            <table id="fundsTable" class="stocksTable tablesorter tablesorter-blue">
+    			<thead>
+					<tr>                    
+						
+						<th width="26px">标记</th>
+						<th width="75px">基金名称</th>
+						<th width="75px">基金代码</th>
+						<th width="66px">持有份额</th>
+						<th width="63px">投入金额</th>
+						<th width="50px">当前单位净值</th>
+						<th width="63px">当前估价</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="templateRow">
+						<!-- 
+							<td class="dragHandle" title="拖动"> </td>
+						-->
+						
+						<td><div class="flag" title="标记基金"></div></td>
+						<td><div><span class="fundName"></span></div></td>
+						<td><div><span class="fundCode" style="cursor: pointer;" title="点击进入新浪财经行"></span></div></td>
+						<td><div><span class="fundUnit"></span></div></td>
+						<td><div><span class="fundValue"></span></div></td>
+						<td><div><span class="fundNetValue"></span></div></td>
+						<td><div><span class="fundNowValue"></span></div></td>
+						
+					</tr>
+				</tbody>
+    		</table>
+			<div id="custom-stock-control" class="custom-stock-control">    			
+    			<button id="btnLoadFund">&nbsp;刷新&nbsp;</button>
+    		</div>    		
+        </div>
+</body>
+</html>

@@ -1,5 +1,9 @@
 $(document).ready(function() {
    init(); 
+   $("#onClickOpenFundPage").click(function() {
+	//console.log('111');
+	chrome.tabs.create({url: "fund.html?#custom-fund-infos"});
+});
 });
 
 var backgroundPage = null; 
