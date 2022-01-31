@@ -5,6 +5,12 @@ $(document).ready(function() {
 var stopUpdateInfo = false;
 
 
+function openFundPage(fundCode) {
+	
+		chrome.tabs.create({url: "http://fund.eastmoney.com/"+ fundCode +".html" , selected: true});
+	
+}
+
 function init() {
 	var surplus = 0;
 
@@ -61,7 +67,7 @@ function newFundRow(fund, activate) {
 	table.append(row);
 
 	$(".fundCode", row).click(function() {
-		openStockPage($(this).text());
+		openFundPage($(this).text());
 	});
 	console.log(fund);
 	
@@ -70,6 +76,7 @@ function newFundRow(fund, activate) {
 		$(".fundCode", row).html(fund.code);
 		$(".fundUnit", row).text(fund.unit);
 		$(".fundValue", row).text(fund.value);
+		$(".fundValue_", row).text(fund.value);
 
 		if ( typeof(fund.stockFlag) != "undefined" && fund.stockFlag == 1 ) {
 			$(".flag", row).addClass("remove").attr("title", "取消标记置顶");
@@ -152,7 +159,7 @@ function initializeFundRow() {
 					
 				}
 				
-				fundList[rawData[fund].code].value = Math.floor(fundList[rawData[fund].code].value*10000)/10000;
+				fundList[rawData[fund].code].value = Math.floor(fundList[rawData[fund].code].value*100)/100;
 				fundList[rawData[fund].code].unit = Math.floor(fundList[rawData[fund].code].unit*100)/100;
 				 
 			}
@@ -211,6 +218,9 @@ function updateFundInfo(row) {
 			
 			$(".fundNetValue", row).text(fundInfo.fundNetValue);
 			var value = parseFloat($(".fundUnit", row).text())*fundInfo.fundNetValue;
+			var temp = parseFloat($('.fundValue_',row).text());
+			temp = value.toFixed(2)-temp.toFixed(2);
+			$('.fundValue',row).text(temp.toFixed(2));
 			$(".fundNowValue", row).text(value.toFixed(2));
 			
 			//$("#fundsTable").trigger("updateCache");
@@ -273,7 +283,7 @@ function getFundInfo(fundCode, f){
 					//console.log('iiiii');
 					try {
 						fundInfo = {
-							fundNetValue: parseFloat(elements.dwjz).toFixed(4),
+							fundNetValue: parseFloat(elements.gsz).toFixed(4),
 							fundRate: parseFloat(elements.gszzl).toFixed(2)
 						}
 						fundName = elements.name;
