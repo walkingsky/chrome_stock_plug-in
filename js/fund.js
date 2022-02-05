@@ -69,7 +69,7 @@ function newFundRow(fund, activate) {
 	$(".fundCode", row).click(function() {
 		openFundPage($(this).text());
 	});
-	console.log(fund);
+	//console.log(fund);
 	
 	if (fund) {
 		$(".fundName", row).text(fund.name);
@@ -130,8 +130,8 @@ function initializeFundRow() {
 					a = fundList[rawData[fund].code].value;
 					b = fundList[rawData[fund].code].unit;
 					if(rawData[fund].code == "519091"){
-						console.log('a:'+a);
-						console.log('b:'+b);
+						//console.log('a:'+a);
+						//console.log('b:'+b);
 					}
 					if(rawData[fund].buy_sell == '买入' || rawData[fund].buy_sell == '转入' ){						
 						//fundList[rawData[fund].code].value = parseFloat(fundList[rawData[fund].code].value).toFixed(4) + parseFloat(rawData[fund].unit).toFixed(2) * parseFloat(rawData[fund].net_value).toFixed(4);
@@ -150,20 +150,13 @@ function initializeFundRow() {
 					}
 					fundList[rawData[fund].code].value = a;
 					fundList[rawData[fund].code].unit = b;
-					if(rawData[fund].code == "519091"){
-						console.log('a:'+a);
-						console.log(parseFloat(rawData[fund].unit).toFixed(2) * parseFloat(rawData[fund].net_value).toFixed(4));
-						console.log('b:'+b);
-						console.log(parseFloat(rawData[fund].unit).toFixed(2))
-					}
-					
 				}
 				
 				fundList[rawData[fund].code].value = Math.floor(fundList[rawData[fund].code].value*100)/100;
 				fundList[rawData[fund].code].unit = Math.floor(fundList[rawData[fund].code].unit*100)/100;
 				 
 			}
-			console.log(fundList);
+			//console.log(fundList);
 			if (undefined != fundList) {
 		
 				for (var i in fundList) {
@@ -217,6 +210,7 @@ function updateFundInfo(row) {
 
 			
 			$(".fundNetValue", row).text(fundInfo.fundNetValue);
+			$(".fundRate",row).text(fundInfo.fundRate+"%");
 			var value = parseFloat($(".fundUnit", row).text())*fundInfo.fundNetValue;
 			var temp = parseFloat($('.fundValue_',row).text());
 			temp = value.toFixed(2)-temp.toFixed(2);
@@ -280,7 +274,7 @@ function getFundInfo(fundCode, f){
 
 				if(elements.length > 5) {
 					elements = JSON.parse(elements);
-					//console.log('iiiii');
+					//console.log(elements);
 					try {
 						fundInfo = {
 							fundNetValue: parseFloat(elements.gsz).toFixed(4),
