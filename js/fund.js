@@ -30,12 +30,13 @@ function init() {
 		},
 		headers:{
 			0:{sorter:false},
-			1:{sorter:false},
-			2:{sorter:false},
+			1:{sorter:"text"},
+			2:{sorter:"text"},
 			3:{ sorter : "digit" },
 			4:{ sorter : "digit" },
 			5:{ sorter : "digit" },
 			6:{ sorter : "digit" },
+			7:{ sorter : "text" },
 		}
 	});
 	$("#btnLoadFund").click(function() { updateFundPrice(); });
@@ -77,6 +78,7 @@ function newFundRow(fund, activate) {
 		$(".fundUnit", row).text(fund.unit);
 		$(".fundValue", row).text(fund.value);
 		$(".fundValue_", row).text(fund.value);
+		$(".fundPlatform", row).text(fund.platform);
 
 		if ( typeof(fund.stockFlag) != "undefined" && fund.stockFlag == 1 ) {
 			$(".flag", row).addClass("remove").attr("title", "取消标记置顶");
@@ -215,7 +217,7 @@ function updateFundInfo(row) {
 			var temp = parseFloat($('.fundValue_',row).text());
 			temp = value.toFixed(2)-temp.toFixed(2);
 			$('.fundValue',row).text(temp.toFixed(2));
-			$(".fundNowValue", row).text(value.toFixed(2));
+			$(".fundNowValue", row).text(value.toFixed(2));			
 			
 			//$("#fundsTable").trigger("updateCache");
 			//$("#fundsTable").trigger("update");
